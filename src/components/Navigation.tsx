@@ -16,14 +16,15 @@ const StyledNavLinks = styled.ul<{ active?: boolean }>`
     position: absolute;
     right: 100%;
     width: 100%;
-    min-height: 80vh;
+    min-height: 90vh;
     top: 10vh;
     overflow: hidden;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
     transition: all 0.75s ease-in-out;
-
+    overflow: hidden;
+    
     ${(props) =>
       props.active &&
       css`

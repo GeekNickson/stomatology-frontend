@@ -8,18 +8,42 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { theme } from './styles/themes/default-theme';
 
 const Globals = createGlobalStyle`
-  *, *::before, *::after {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  ::selection {
+    text-shadow: none;
+    color: #fff;
+    background-color: rgba(94, 94, 202, 0.5);
   }
 
   html {
     font-size: 62.5%;
   }
 
+  *, *::before, *::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  img {
+    height: auto;
+    max-width: 100%;
+    user-select: none;
+  }
+
+  button {
+    color: inherit;
+  }
+
+  a, button {
+    touch-action: manipulation;
+  }
+
+  svg {
+    fill: currentColor;
   }
 `;
 

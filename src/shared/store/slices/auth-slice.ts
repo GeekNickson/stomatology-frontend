@@ -63,7 +63,6 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = payload;
     });
-
     builder.addCase(logout.pending, (state) => {
       state.isLoading = true;
     });

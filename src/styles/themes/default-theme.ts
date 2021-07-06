@@ -10,6 +10,7 @@ export const theme: DefaultTheme = {
   fontSize: {
     small: '1em',
     medium: '2em',
+    mediumForm: '3.6em',
     large: '4em',
   },
   breakpoints: {
