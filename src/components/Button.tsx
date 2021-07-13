@@ -1,11 +1,16 @@
-import { ReactNode } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 
+type ButtonType = 'button' | 'submit' | 'reset' | undefined;
+interface ButtonProps {
+  type: ButtonType;
+  className?: string;
+}
 const StyledButton = styled.button`
   outline: none;
   color: ${({ theme }) => theme.color.dark};
   background-color: ${({ theme }) => theme.color.primary};
-  padding: 0.5em 1.25em;
+  padding: 0.3em 0.65em;
   border: none;
   border-radius: 1rem;
   text-align: center;
@@ -14,8 +19,12 @@ const StyledButton = styled.button`
   cursor: pointer;
 `;
 
-function Button({ children }: { children: ReactNode }) {
-  return <StyledButton> {children} </StyledButton>;
-}
+export const Button: FC<ButtonProps> = ({ children, type, className }) => {
+  return (
+    <StyledButton type={type} className={className}>
+      {children}
+    </StyledButton>
+  );
+};
 
 export default Button;

@@ -7,6 +7,8 @@ declare module 'styled-components' {
       light: string;
       primary: string;
       secondary: string;
+      danger: string;
+      action: string;
     };
     fontSize: {
       small: string;

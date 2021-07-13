@@ -6,11 +6,13 @@ export const theme: DefaultTheme = {
     light: '#ECECEC',
     primary: '#B1E4E8',
     secondary: '#FFFFFF',
+    danger: '#F07D7D',
+    action: '#7DC5F0',
   },
   fontSize: {
     small: '1em',
     medium: '2em',
-    mediumForm: '3.6em',
+    mediumForm: '3em',
     large: '4em',
   },
   breakpoints: {
