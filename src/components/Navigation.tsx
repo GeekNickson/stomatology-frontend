@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Cheeseburger from './Cheeseburger';
 import { useState } from 'react';
+import { LOGIN_ROUTE } from '../utils/constants/routes.constants';
+import { useAppSelector } from '../shared/hooks/hooks';
 
 const StyledNavLinks = styled.ul<{ active?: boolean }>`
   display: flex;
@@ -24,7 +26,7 @@ const StyledNavLinks = styled.ul<{ active?: boolean }>`
     justify-content: space-evenly;
     transition: all 0.75s ease-in-out;
     overflow: hidden;
-    
+
     ${(props) =>
       props.active &&
       css`
@@ -64,12 +66,13 @@ const StyledCheeseburger = styled(Cheeseburger)`
 
 const Navigation = () => {
   const [open, setOpen] = useState(false);
+  const { isAuthenticated, user } = useAppSelector((state) => state.authReducer);
 
   return (
     <>
       <StyledNavLinks active={open}>
         <li>
-          <StyledNavLink to="/">Home</StyledNavLink>
+          <StyledNavLink to="/home">Home</StyledNavLink>
         </li>
         <li>
           <StyledNavLink to="/">Services</StyledNavLink>
@@ -78,9 +81,15 @@ const Navigation = () => {
           <StyledNavLink to="/">Specialists</StyledNavLink>
         </li>
         <li>
-          <StyledNavLink color="#EBC0DC" to="/">
-            Sign In
-          </StyledNavLink>
+          {isAuthenticated ? (
+            <StyledNavLink color="#EBC0DC" to={LOGIN_ROUTE}>
+              {user?.firstName}
+            </StyledNavLink>
+          ) : (
+            <StyledNavLink color="#EBC0DC" to={LOGIN_ROUTE}>
+              Sign In
+            </StyledNavLink>
+          )}
         </li>
       </StyledNavLinks>
       <StyledCheeseburger setOpen={setOpen} open={open} />

@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { store } from './shared/store/store';
+import { history, store } from './shared/store/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { theme } from './styles/themes/default-theme';
+import { ConnectedRouter } from 'connected-react-router';
 
 const Globals = createGlobalStyle`
   ::selection {
@@ -52,7 +53,9 @@ ReactDOM.render(
     <Globals />
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <App />
+        <ConnectedRouter history={history}>
+          <App />
+        </ConnectedRouter>
       </Provider>
     </ThemeProvider>
   </React.StrictMode>,

@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { push } from 'connected-react-router';
 import { User } from '../../model/user.model';
 import { authService, Credentials } from '../../service/auth.service';
+import { localStorageService } from '../../service/local-storage.service';
 
 export const LOGIN_ACTION = 'auth/login';
 export const LOGOUT_ACTION = 'auth/logout';
-
+export const REGISTER_ACTION = 'auth/register';
 export interface AuthError {
   message: string;
   code: number;
@@ -29,6 +31,21 @@ export const login = createAsyncThunk<User, Credentials, { rejectValue: AuthErro
   async (credentials: Credentials, thunkApi) => {
     try {
       const response = await authService.login(credentials);
+      localStorageService.setToken(response.data.jwt);
+      return response.data.user;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response as AuthError);
+    }
+  }
+);
+
+export const registerUser = createAsyncThunk<User, FormData, { rejectValue: AuthError }>(
+  REGISTER_ACTION,
+  async (data: FormData, thunkApi) => {
+    try {
+      const response = await authService.register(data);
+      localStorageService.setToken(response.data.jwt);
+      thunkApi.dispatch(push('/home'));
       return response.data.user;
     } catch (error) {
       return thunkApi.rejectWithValue(error.response as AuthError);
@@ -58,6 +75,20 @@ const authSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(login.rejected, (state, { payload }) => {
+      state.isAuthenticated = false;
+      state.user = undefined;
+      state.isLoading = false;
+      state.error = payload;
+    });
+    builder.addCase(registerUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(registerUser.fulfilled, (state, { payload }) => {
+      state.isAuthenticated = true;
+      state.user = payload;
+      state.isLoading = false;
+    });
+    builder.addCase(registerUser.rejected, (state, { payload }) => {
       state.isAuthenticated = false;
       state.user = undefined;
       state.isLoading = false;

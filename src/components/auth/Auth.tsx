@@ -1,11 +1,15 @@
 import { Form, Formik } from 'formik';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
 import Input from '../Input';
 import Flex from '../layout/Flex';
 import Uploader from '../Uploader';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
+import { REGISTER_ROUTE } from '../../utils/constants/routes.constants';
+import { useAppDispatch } from '../../shared/hooks/hooks';
+import { login, registerUser } from '../../shared/store/slices/auth-slice';
 
 interface LoginValues {
   email: string;
@@ -16,6 +20,11 @@ interface RegisterValues extends LoginValues {
   firstName: string;
   lastName: string;
   phone: string;
+  profilePicture: File;
+}
+
+interface AuthProps {
+  register: boolean;
 }
 
 const StyledCard = styled(Flex)`
@@ -70,6 +79,12 @@ const StyledContainer = styled(Flex)`
   width: 100%;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: ${({ theme }) => theme.color.dark};
+  font-size: ${({ theme }) => theme.fontSize.medium};
+`;
+
 const loginValidation = Yup.object({
   email: Yup.string().email('Invalid E-mail').required('This field is required'),
   password: Yup.string()
@@ -85,11 +100,25 @@ const registerValidation = loginValidation.concat(
   })
 );
 
-function Auth() {
-  const [isRegister] = useState(true);
+const formRegisterRequest = (data: RegisterValues): FormData => {
+  const formData = new FormData();
+
+  for (const [key, value] of Object.entries(data)) {
+    formData.append(key, value);
+  }
+
+  return formData;
+};
+
+const Auth: FC<AuthProps> = ({ register }) => {
+  const [isRegister] = useState(register);
+
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (values: LoginValues | RegisterValues, setSubmitting: (isSubmitting: boolean) => void) => {
-    console.log(values);
+    isRegister
+      ? dispatch(registerUser(formRegisterRequest(values as RegisterValues)))
+      : dispatch(login({ email: values.email, password: values.password }));
     setSubmitting(false);
   };
 
@@ -106,34 +135,38 @@ function Auth() {
                   firstName: '',
                   lastName: '',
                   phone: '',
+                  profilePicture: null,
                 }
               : { email: '', password: '' }
           }
           validationSchema={isRegister ? registerValidation : loginValidation}
           onSubmit={(values, { setSubmitting }) => handleSubmit(values, setSubmitting)}
         >
-          <Form>
-            <Flex flexProps={{ direction: 'column', align: 'center', justify: 'space-evenly' }}>
-              <Input id="email" name="email" type="email" placeholder="E-mail" />
-              <Input id="password" name="password" type="password" placeholder="Password" />
-              {isRegister && (
-                <>
-                  <Input id="firstName" name="firstName" type="text" placeholder="First Name" />
-                  <Input id="lastName" name="lastName" type="text" placeholder="Last Name" />
-                  <Input id="phone" name="phone" type="tel" placeholder="Phone" />
-                  <StyledContainer flexProps={{ align: 'center', justify: 'space-between' }}>
-                    <StyledLabel>Drop your profile picture below</StyledLabel>
-                    <Uploader />
-                  </StyledContainer>
-                </>
-              )}
-              <StyledButton type={'submit'}>{isRegister ? 'Register' : 'Login'}</StyledButton>
-            </Flex>
-          </Form>
+          {({ setFieldValue }) => (
+            <Form>
+              <Flex flexProps={{ direction: 'column', align: 'center', justify: 'space-evenly' }}>
+                <Input id="email" name="email" type="email" placeholder="E-mail" />
+                <Input id="password" name="password" type="password" placeholder="Password" />
+                {isRegister && (
+                  <>
+                    <Input id="firstName" name="firstName" type="text" placeholder="First Name" />
+                    <Input id="lastName" name="lastName" type="text" placeholder="Last Name" />
+                    <Input id="phone" name="phone" type="tel" placeholder="Phone" />
+                    <StyledContainer flexProps={{ align: 'center', justify: 'space-between' }}>
+                      <StyledLabel>Drop your profile picture below</StyledLabel>
+                      <Uploader setFieldValue={setFieldValue} />
+                    </StyledContainer>
+                  </>
+                )}
+                {!isRegister && <StyledLink to={REGISTER_ROUTE}>Don't have an account? Register!</StyledLink>}
+                <StyledButton type="submit">{isRegister ? 'Register' : 'Login'}</StyledButton>
+              </Flex>
+            </Form>
+          )}
         </Formik>
       </StyledCard>
     </StyledFlex>
   );
-}
+};
 
 export default Auth;

@@ -22,6 +22,7 @@ const StyledInput = styled.input`
   border-bottom: 3px solid ${({ theme }) => theme.color.primary};
   border-radius: 1rem;
   width: fill-available;
+  flex: 1;
 `;
 
 const StyledError = styled.small`
