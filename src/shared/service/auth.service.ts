@@ -27,6 +27,10 @@ class AuthService {
   public refresh(): AxiosPromise<string> {
     return authHost.get('api/refresh');
   }
+
+  public getAuth(): AxiosPromise<User> {
+    return authHost.get('api/auth');
+  }
 }
 
 export const authService = new AuthService();

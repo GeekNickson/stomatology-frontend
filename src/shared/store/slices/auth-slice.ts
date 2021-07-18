@@ -4,6 +4,7 @@ import { User } from '../../model/user.model';
 import { authService, Credentials } from '../../service/auth.service';
 import { localStorageService } from '../../service/local-storage.service';
 
+export const LOAD_USER = 'auth/loadUser';
 export const LOGIN_ACTION = 'auth/login';
 export const LOGOUT_ACTION = 'auth/logout';
 export const REGISTER_ACTION = 'auth/register';
@@ -34,7 +35,8 @@ export const login = createAsyncThunk<User, Credentials, { rejectValue: AuthErro
       localStorageService.setToken(response.data.jwt);
       return response.data.user;
     } catch (error) {
-      return thunkApi.rejectWithValue(error.response as AuthError);
+      const authError: AuthError = { code: error.response.status, message: error.response.data };
+      return thunkApi.rejectWithValue(authError);
     }
   }
 );
@@ -48,7 +50,8 @@ export const registerUser = createAsyncThunk<User, FormData, { rejectValue: Auth
       thunkApi.dispatch(push('/home'));
       return response.data.user;
     } catch (error) {
-      return thunkApi.rejectWithValue(error.response as AuthError);
+      const authError: AuthError = { code: error.response.status, message: error.response.data };
+      return thunkApi.rejectWithValue(authError);
     }
   }
 );
@@ -57,7 +60,18 @@ export const logout = createAsyncThunk<void, void, { rejectValue: AuthError }>(L
   try {
     await authService.logout();
   } catch (error) {
-    return thunkApi.rejectWithValue(error.response as AuthError);
+    const authError: AuthError = { code: error.response.status, message: error.response.data };
+    return thunkApi.rejectWithValue(authError);
+  }
+});
+
+export const loadUser = createAsyncThunk<User, void, { rejectValue: AuthError }>(LOAD_USER, async (_, thunkApi) => {
+  try {
+    const response = await authService.getAuth();
+    return response.data;
+  } catch (error) {
+    const authError: AuthError = { code: error.response.status, message: error.response.data };
+    return thunkApi.rejectWithValue(authError);
   }
 });
 
@@ -75,6 +89,20 @@ const authSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(login.rejected, (state, { payload }) => {
+      state.isAuthenticated = false;
+      state.user = undefined;
+      state.isLoading = false;
+      state.error = payload;
+    });
+    builder.addCase(loadUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(loadUser.fulfilled, (state, { payload }) => {
+      state.isAuthenticated = true;
+      state.user = payload;
+      state.isLoading = false;
+    });
+    builder.addCase(loadUser.rejected, (state, { payload }) => {
       state.isAuthenticated = false;
       state.user = undefined;
       state.isLoading = false;
