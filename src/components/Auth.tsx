@@ -10,8 +10,12 @@ import { LinkContainer } from 'react-router-bootstrap';
 import styled from 'styled-components';
 import FormikInput from './FormikInput';
 
-export const StyledCard = styled(Card)`
+const StyledCard = styled(Card)`
   min-width: 40vw;
+`;
+
+const StyledContainer = styled(Container)`
+  min-height: 92vh;
 `;
 
 interface LoginValues {
@@ -69,7 +73,7 @@ const Auth: FC<AuthProps> = ({ register }) => {
   };
 
   return (
-    <Container className="mt-5 d-flex align-items-center justify-content-center">
+    <StyledContainer className="d-flex align-items-center justify-content-center">
       <StyledCard>
         <Card.Body>
           <Formik
@@ -131,7 +135,7 @@ const Auth: FC<AuthProps> = ({ register }) => {
           </Formik>
         </Card.Body>
       </StyledCard>
-    </Container>
+    </StyledContainer>
   );
 };
 

@@ -27,7 +27,7 @@ const Navigation = () => {
 
   return (
     <>
-      <Nav justify className="align-items-center justify-content-between">
+      <Nav justify className="align-items-center justify-content-center flex-grow-3">
         <LinkContainer to={HOME_ROUTE}>
           <NavLink>Home</NavLink>
         </LinkContainer>
@@ -38,7 +38,7 @@ const Navigation = () => {
           <NavLink>Services</NavLink>
         </LinkContainer>
       </Nav>
-      <Nav className="align-items-center ms-auto">
+      <Nav className="align-items-center justify-content-end">
         {isAuthenticated ? (
           <>
             <p className="mb-0 ms-1">

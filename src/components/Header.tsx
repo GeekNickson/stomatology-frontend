@@ -10,11 +10,11 @@ const StyledNavbar = styled(Navbar)`
 
 const Header = () => {
   return (
-    <StyledNavbar bg="light" expand="lg">
+    <StyledNavbar bg="light" expand="lg" className="shadow">
       <Container>
-        <NavbarBrand>Toothy</NavbarBrand>
+        <NavbarBrand className="flex-lg-grow-1">Toothy</NavbarBrand>
         <NavbarToggle aria-controls="nav" />
-        <NavbarCollapse id="nav">
+        <NavbarCollapse id="nav" className="justify-content-between">
           <Navigation />
         </NavbarCollapse>
       </Container>

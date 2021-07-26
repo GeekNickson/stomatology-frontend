@@ -10,18 +10,19 @@ export interface ServiceProps {
 
 const StyledCardImage = styled(Card.Img)`
   object-fit: cover;
-  height: 6rem;
+  height: 10rem;
 `;
 
 const StyledCard = styled(Card)`
-  width: 10rem;
+  width: 14rem;
+  min-height: 20.5rem;
 `;
 
 const Service: FC<ServiceProps> = ({ name, price, imageUrl }) => {
   return (
     <StyledCard>
       <StyledCardImage src={process.env.REACT_APP_API_URL + 'images/' + imageUrl} alt={name} />
-      <Card.Body className="d-flex flex-column align-items-center justify-content-center">
+      <Card.Body className="d-flex flex-column align-items-center justify-content-between">
         <Card.Title className="text-center">{name}</Card.Title>
         <Card.Text>Price: {price}</Card.Text>
         <Button variant="success">Sign Up</Button>

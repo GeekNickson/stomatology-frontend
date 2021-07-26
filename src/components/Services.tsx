@@ -14,10 +14,11 @@ const Services: FC<ServicesProps> = () => {
   }, [dispatch]);
 
   return (
-    <Container>
+    <Container className="mt-5 mb-5">
+      <h1 className="display-5 fw-bold text-center mb-5">Our Services</h1>
       <Row className="g-5">
         {services.map((service) => (
-          <Col>
+          <Col className="d-flex justify-content-center align-items-center">
             <Service {...service} />
           </Col>
         ))}
