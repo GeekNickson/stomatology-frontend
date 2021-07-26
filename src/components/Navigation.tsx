@@ -1,98 +1,70 @@
-import styled, { css } from 'styled-components';
-import { NavLink } from 'react-router-dom';
-import Cheeseburger from './Cheeseburger';
-import { useState } from 'react';
-import { LOGIN_ROUTE } from '../utils/constants/routes.constants';
-import { useAppSelector } from '../shared/hooks/hooks';
+import { useHistory } from 'react-router-dom';
+import { HOME_ROUTE, LOGIN_ROUTE } from '../utils/constants/routes.constants';
+import { useAppDispatch, useAppSelector } from '../shared/hooks/hooks';
+import { logout } from '../shared/store/slices/auth-slice';
+import { Nav, NavLink, Image, NavDropdown } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import styled from 'styled-components';
 
-const StyledNavLinks = styled.ul<{ active?: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  list-style: none;
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    background: ${({ theme }) => theme.color.secondary};
-    z-index: 1;
-    opacity: 0;
-    position: absolute;
-    right: 100%;
-    width: 100%;
-    min-height: 90vh;
-    top: 10vh;
-    overflow: hidden;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    transition: all 0.75s ease-in-out;
-    overflow: hidden;
-
-    ${(props) =>
-      props.active &&
-      css`
-        right: 0;
-        opacity: 1;
-      `}
-  }
-`;
-
-const StyledNavLink = styled(NavLink)<{ color?: string }>`
-  padding: 1rem 1.25rem;
-  font-size: ${(props) => props.theme.fontSize.medium};
-  color: ${(props) => props.color || props.theme.color.light};
-  text-decoration: none;
-  text-align: center;
-  border-radius: 1rem;
-
-  &:hover {
-    color: ${(props) => props.theme.color.dark};
-    background-color: ${(props) => props.color || props.theme.color.primary};
-    transition: 0.75s ease-in-out;
-  }
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    color: ${({ theme }) => theme.color.dark};
-  }
-`;
-
-const StyledCheeseburger = styled(Cheeseburger)`
-  justify-self: end;
-  display: none;
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    display: block;
-  }
+const StyledAvatar = styled(Image)`
+  width: 3rem;
+  height: 3rem;
 `;
 
 const Navigation = () => {
-  const [open, setOpen] = useState(false);
   const { isAuthenticated, user } = useAppSelector((state) => state.authReducer);
+
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+
+  const handleLogoutClick = () => {
+    dispatch(logout());
+  };
+
+  const handleProfileClick = () => {
+    history.push(`/profile/${user?.id}`);
+  };
 
   return (
     <>
-      <StyledNavLinks active={open}>
-        <li>
-          <StyledNavLink to="/home">Home</StyledNavLink>
-        </li>
-        <li>
-          <StyledNavLink to="/">Services</StyledNavLink>
-        </li>
-        <li>
-          <StyledNavLink to="/">Specialists</StyledNavLink>
-        </li>
-        <li>
-          {isAuthenticated ? (
-            <StyledNavLink color="#EBC0DC" to={LOGIN_ROUTE}>
-              {user?.firstName}
-            </StyledNavLink>
-          ) : (
-            <StyledNavLink color="#EBC0DC" to={LOGIN_ROUTE}>
-              Sign In
-            </StyledNavLink>
-          )}
-        </li>
-      </StyledNavLinks>
-      <StyledCheeseburger setOpen={setOpen} open={open} />
+      <Nav justify className="align-items-center justify-content-between">
+        <LinkContainer to={HOME_ROUTE}>
+          <NavLink>Home</NavLink>
+        </LinkContainer>
+        <LinkContainer to="/specialists">
+          <NavLink>Specialists</NavLink>
+        </LinkContainer>
+        <LinkContainer to="/services">
+          <NavLink>Services</NavLink>
+        </LinkContainer>
+      </Nav>
+      <Nav className="align-items-center ms-auto">
+        {isAuthenticated ? (
+          <>
+            <p className="mb-0 ms-1">
+              Hello, <strong>{user?.firstName}</strong>
+            </p>
+            <NavDropdown
+              id="nav-dropdown"
+              title={
+                <StyledAvatar
+                  className="avatar"
+                  src={process.env.REACT_APP_API_URL + 'images/' + user?.profilePictureUrl}
+                  roundedCircle
+                  thumbnail
+                />
+              }
+            >
+              <NavDropdown.Item onClick={handleProfileClick}>Profile</NavDropdown.Item>
+              <NavDropdown.Item onClick={handleLogoutClick}>Logout</NavDropdown.Item>
+            </NavDropdown>
+          </>
+        ) : (
+          <LinkContainer to={LOGIN_ROUTE}>
+            <NavLink>Sign In</NavLink>
+          </LinkContainer>
+        )}
+      </Nav>
     </>
   );
 };

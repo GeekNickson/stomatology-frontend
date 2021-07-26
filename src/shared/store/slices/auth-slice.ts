@@ -1,22 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { push } from 'connected-react-router';
+import { ApiError } from '../../model/error.model';
 import { User } from '../../model/user.model';
 import { authService, Credentials } from '../../service/auth.service';
 import { localStorageService } from '../../service/local-storage.service';
 
-export const LOAD_USER = 'auth/loadUser';
-export const LOGIN_ACTION = 'auth/login';
-export const LOGOUT_ACTION = 'auth/logout';
-export const REGISTER_ACTION = 'auth/register';
-export interface AuthError {
-  message: string;
-  code: number;
-}
-
 interface AuthSliceState {
   isAuthenticated: boolean;
   isLoading: boolean;
-  error?: AuthError;
+  error?: ApiError;
   user?: User;
 }
 
@@ -27,21 +19,27 @@ const initialState: AuthSliceState = {
   user: undefined,
 };
 
-export const login = createAsyncThunk<User, Credentials, { rejectValue: AuthError }>(
+export const LOAD_USER = 'auth/loadUser';
+export const LOGIN_ACTION = 'auth/login';
+export const LOGOUT_ACTION = 'auth/logout';
+export const REGISTER_ACTION = 'auth/register';
+
+const login = createAsyncThunk<User, Credentials, { rejectValue: ApiError }>(
   LOGIN_ACTION,
   async (credentials: Credentials, thunkApi) => {
     try {
       const response = await authService.login(credentials);
       localStorageService.setToken(response.data.jwt);
+      thunkApi.dispatch(push('/home'));
       return response.data.user;
     } catch (error) {
-      const authError: AuthError = { code: error.response.status, message: error.response.data };
+      const authError: ApiError = { code: error.response.status, message: error.response.data };
       return thunkApi.rejectWithValue(authError);
     }
   }
 );
 
-export const registerUser = createAsyncThunk<User, FormData, { rejectValue: AuthError }>(
+const registerUser = createAsyncThunk<User, FormData, { rejectValue: ApiError }>(
   REGISTER_ACTION,
   async (data: FormData, thunkApi) => {
     try {
@@ -50,27 +48,29 @@ export const registerUser = createAsyncThunk<User, FormData, { rejectValue: Auth
       thunkApi.dispatch(push('/home'));
       return response.data.user;
     } catch (error) {
-      const authError: AuthError = { code: error.response.status, message: error.response.data };
+      const authError: ApiError = { code: error.response.status, message: error.response.data };
       return thunkApi.rejectWithValue(authError);
     }
   }
 );
 
-export const logout = createAsyncThunk<void, void, { rejectValue: AuthError }>(LOGOUT_ACTION, async (_, thunkApi) => {
+const logout = createAsyncThunk<void, void, { rejectValue: ApiError }>(LOGOUT_ACTION, async (_, thunkApi) => {
   try {
     await authService.logout();
+    localStorageService.removeToken();
+    thunkApi.dispatch(push('/home'));
   } catch (error) {
-    const authError: AuthError = { code: error.response.status, message: error.response.data };
+    const authError: ApiError = { code: error.response.status, message: error.response.data };
     return thunkApi.rejectWithValue(authError);
   }
 });
 
-export const loadUser = createAsyncThunk<User, void, { rejectValue: AuthError }>(LOAD_USER, async (_, thunkApi) => {
+const loadUser = createAsyncThunk<User, void, { rejectValue: ApiError }>(LOAD_USER, async (_, thunkApi) => {
   try {
     const response = await authService.getAuth();
     return response.data;
   } catch (error) {
-    const authError: AuthError = { code: error.response.status, message: error.response.data };
+    const authError: ApiError = { code: error.response.status, message: error.response.data };
     return thunkApi.rejectWithValue(authError);
   }
 });
@@ -139,3 +139,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+export { loadUser, login, registerUser, logout };

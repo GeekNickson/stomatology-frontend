@@ -1,5 +1,11 @@
+import Services from './Services';
+
 const Home = () => {
-  return <> </>;
+  return (
+    <>
+      <Services />
+    </>
+  );
 };
 
 export default Home;

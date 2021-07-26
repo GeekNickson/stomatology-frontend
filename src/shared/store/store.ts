@@ -1,5 +1,7 @@
 import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
 import authReducer from './slices/auth-slice';
+import profileReducer from './slices/profile-slice';
+import servicesReducer from './slices/medical-service-slice';
 import { createBrowserHistory } from 'history';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 
@@ -7,6 +9,8 @@ export const history = createBrowserHistory();
 
 export const rootReducer = combineReducers({
   authReducer,
+  profileReducer,
+  servicesReducer,
   router: connectRouter(history),
 });
 
