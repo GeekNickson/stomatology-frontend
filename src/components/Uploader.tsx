@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { theme } from '../styles/themes/default-theme';
 import { FC, useState } from 'react';
+import { Image } from 'react-bootstrap';
 
 interface FileWithPreview {
   file: File;
@@ -20,7 +21,7 @@ interface DropzoneProps {
 
 const getColor = (props: DropzoneProps) => {
   if (props.isDragAccept) {
-    return theme.color.primary;
+    return theme.color.success;
   }
   if (props.isDragReject) {
     return theme.color.danger;
@@ -35,23 +36,26 @@ const Container = styled.div<DropzoneProps>`
   font-size: ${({ theme }) => theme.fontSize.mediumForm};
   display: flex;
   margin: 2rem auto;
-  width: fill-available;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
-  border-width: 0.5rem;
+  justify-content: center;
+  height: 10rem;
+  border-width: 3px;
   border-radius: 1rem;
   border-color: ${(props) => getColor(props)};
-  border-style: dashed;
+  border-style: solid;
   background-color: white;
-  color: ${({ theme }) => theme.color.primary};
+  color: ${({ theme }) => theme.color.action};
   outline: none;
   transition: border 0.24s ease-in-out;
 `;
 
-const StyledImage = styled.img`
-  max-width: 200px;
+const StyledImage = styled(Image)`
+  object-fit: cover;
+  width: 9rem;
+  height: 9rem;
 `;
+
 const Uploader: FC<UploaderProps> = ({ setFieldValue }) => {
   const [file, setFile] = useState<FileWithPreview | null>(null);
 
@@ -70,15 +74,21 @@ const Uploader: FC<UploaderProps> = ({ setFieldValue }) => {
 
   const preview = (
     <div>
-      <StyledImage src={file?.preview} alt={file?.file.name} />
+      <StyledImage src={file?.preview} alt={file?.file.name} thumbnail roundedCircle />
     </div>
   );
 
   return (
     <Container {...getRootProps({ isDragActive, isDragAccept, isDragReject })}>
       <input {...getInputProps()} />
-      <FontAwesomeIcon icon={faUpload} />
-      {file && preview}
+      {file ? (
+        preview
+      ) : (
+        <>
+          <FontAwesomeIcon icon={faUpload} />
+          <p className="text-center fs-4">Drag your profile picture here</p>
+        </>
+      )}
     </Container>
   );
 };

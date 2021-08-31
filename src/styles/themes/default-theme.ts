@@ -3,11 +3,12 @@ import { DefaultTheme } from 'styled-components';
 export const theme: DefaultTheme = {
   color: {
     dark: '#181819',
-    light: '#ECECEC',
+    light: '#f8f9fa',
     primary: '#B1E4E8',
     secondary: '#FFFFFF',
-    danger: '#F07D7D',
-    action: '#7DC5F0',
+    danger: '#dc3545',
+    action: '#0d6efd',
+    success: '#198754',
   },
   fontSize: {
     small: '1em',

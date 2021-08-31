@@ -23,6 +23,9 @@ const StyledLabel = styled.label`
   }
 `;
 
+const StyledContainer = styled(Container)`
+  min-height: 92vh;
+`;
 const Profile: FC<ProfileProps> = () => {
   const params = useParams<ProfileParams>();
   const dispatch = useAppDispatch();
@@ -33,7 +36,7 @@ const Profile: FC<ProfileProps> = () => {
   }, [dispatch, params.id]);
 
   return (
-    <Container className="mt-5 d-flex align-items-center justify-content-center">
+    <StyledContainer className="mt-5 d-flex align-items-center justify-content-center">
       <Card>
         <Card.Header as="h3" className="text-center">
           Profile
@@ -68,7 +71,7 @@ const Profile: FC<ProfileProps> = () => {
           </Row>
         </Card.Body>
       </Card>
-    </Container>
+    </StyledContainer>
   );
 };
 
