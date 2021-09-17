@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Button, Carousel, CarouselItem, Image } from 'react-bootstrap';
 import styled from 'styled-components';
-
+import { StyledButton } from './DoctorCard';
 export interface PromoProps {}
 
 const StyledImage = styled(Image)`
@@ -41,12 +41,12 @@ const Promo: FC<PromoProps> = () => {
           <h3 className="display-2">Our Doctors care about you and deliever the very best possible results</h3>
         </StyledCenteredCarouselCaption>
         <StyledCarouselCaption>
-          <Button variant="primary" className="me-1">
+          <StyledButton variant="primary" className="me-1">
             About Us
-          </Button>
-          <Button variant="light" className="ms-1">
+          </StyledButton>
+          <StyledButton variant="dark" className="ms-1">
             Our Doctors
-          </Button>
+          </StyledButton>
         </StyledCarouselCaption>
       </StyledCarouselItem>
       <StyledCarouselItem>
@@ -55,12 +55,12 @@ const Promo: FC<PromoProps> = () => {
           <h3 className="display-2">We offer and use only professional toothbrushes</h3>
         </StyledCenteredCarouselCaption>
         <StyledCarouselCaption>
-          <Button variant="primary" className="me-1">
+          <StyledButton variant="primary" className="me-1">
             About Us
-          </Button>
-          <Button variant="light" className="ms-1">
+          </StyledButton>
+          <StyledButton variant="dark" className="ms-1">
             Our Doctors
-          </Button>
+          </StyledButton>
         </StyledCarouselCaption>
       </StyledCarouselItem>
       <StyledCarouselItem>

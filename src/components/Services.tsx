@@ -14,7 +14,7 @@ const Services: FC<ServicesProps> = () => {
   }, [dispatch]);
 
   return (
-    <Container className="mt-5 mb-5">
+    <Container className="mt-5 mb-5" id="services">
       <h1 className="display-5 fw-bold text-center mb-5">Our Services</h1>
       <Row className="g-5">
         {services.map((service, idx) => (

@@ -5,7 +5,6 @@ import { logout } from '../shared/store/slices/auth-slice';
 import { Nav, NavLink, Image, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import styled from 'styled-components';
-
 const StyledAvatar = styled(Image)`
   width: 3rem;
   height: 3rem;
@@ -31,10 +30,10 @@ const Navigation = () => {
         <LinkContainer to={HOME_ROUTE}>
           <NavLink>Home</NavLink>
         </LinkContainer>
-        <LinkContainer to="/specialists">
+        <LinkContainer to={HOME_ROUTE + '/#specialists'}>
           <NavLink>Specialists</NavLink>
         </LinkContainer>
-        <LinkContainer to="/services">
+        <LinkContainer to={HOME_ROUTE + '/#services'}>
           <NavLink>Services</NavLink>
         </LinkContainer>
       </Nav>

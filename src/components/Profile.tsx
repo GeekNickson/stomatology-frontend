@@ -1,9 +1,10 @@
 import { FC, useEffect } from 'react';
-import { Button, Card, Col, Container, Image, Row } from 'react-bootstrap';
+import {  Card, Col, Container, Image, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../shared/hooks/hooks';
 import { fetchUserdata } from '../shared/store/slices/profile-slice';
+import { StyledButton } from './DoctorCard';
 
 export interface ProfileProps {}
 
@@ -53,9 +54,9 @@ const Profile: FC<ProfileProps> = () => {
                 <p className="text-center mb-3">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <Button variant="success" className="mb-3">
+                <StyledButton variant="success" className="mb-3">
                   Contact
-                </Button>
+                </StyledButton>
               </div>
             </Col>
             <Col>

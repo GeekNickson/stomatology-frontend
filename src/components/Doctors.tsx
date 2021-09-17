@@ -18,7 +18,7 @@ const Doctors: FC<DoctorsProps> = () => {
   }, []);
 
   return (
-    <Container className="mt-5 mb-5">
+    <Container className="mt-5 mb-5" id="specialists">
       <h1 className="display-5 fw-bold text-center mb-5">Our Doctors</h1>
       <Row className="g-5">
         {doctors.map((doctor, idx) => (

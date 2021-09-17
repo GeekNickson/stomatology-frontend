@@ -9,12 +9,13 @@ import { Button, Card, Container, FormGroup, FormLabel } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import styled from 'styled-components';
 import FormikInput from './FormikInput';
+import { StyledButton } from './DoctorCard';
 
-const StyledCard = styled(Card)`
+export const StyledCard = styled(Card)`
   min-width: 40vw;
 `;
 
-const StyledContainer = styled(Container)`
+export const StyledContainer = styled(Container)`
   min-height: 92vh;
 `;
 
@@ -65,7 +66,6 @@ const Auth: FC<AuthProps> = ({ register }) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = (values: LoginValues | RegisterValues, setSubmitting: (isSubmitting: boolean) => void) => {
-    console.log(values);
     isRegister
       ? dispatch(registerUser(formRegisterRequest(values as RegisterValues)))
       : dispatch(login({ email: values.email, password: values.password }));
@@ -127,9 +127,9 @@ const Auth: FC<AuthProps> = ({ register }) => {
                     <Button variant="link">Don't have an account? Register!</Button>
                   </LinkContainer>
                 )}
-                <Button type="submit" variant="primary" disabled={isSubmitting}>
+                <StyledButton type="submit" variant="primary" disabled={isSubmitting}>
                   {isRegister ? 'Register' : 'Login'}
-                </Button>
+                </StyledButton>
               </Form>
             )}
           </Formik>

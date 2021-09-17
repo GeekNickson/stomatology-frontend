@@ -9,6 +9,7 @@ import { theme } from './styles/themes/default-theme';
 import { ConnectedRouter } from 'connected-react-router';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>

@@ -8,7 +8,8 @@ export interface InputProps {
   type: string;
   placeholder?: string;
 }
-const StyledError = styled.small`
+
+export const StyledError = styled.small`
   color: ${({ theme }) => theme.color.danger};
 `;
 
