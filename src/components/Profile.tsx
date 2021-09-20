@@ -1,77 +1,52 @@
-import { FC, useEffect } from 'react';
-import {  Card, Col, Container, Image, Row } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { FC, useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '../shared/hooks/hooks';
-import { fetchUserdata } from '../shared/store/slices/profile-slice';
-import { StyledButton } from './DoctorCard';
+import { useAppSelector } from '../shared/hooks/hooks';
+import { Appointment } from '../shared/model/appointment.model';
+import { appointmentService } from '../shared/service/appointment.service';
+import Appointments from './Appointments';
+import UserCard from './UserCard';
+import UserInfo from './UserInfo';
 
 export interface ProfileProps {}
-
-interface ProfileParams {
-  id: string;
-}
-
-const StyledAvatar = styled(Image)`
-  width: 8rem;
-  height: 8rem;
-`;
-
-const StyledLabel = styled.label`
-  font-weight: 700;
-  &::after {
-    content: ':';
-  }
-`;
 
 const StyledContainer = styled(Container)`
   min-height: 92vh;
 `;
-const Profile: FC<ProfileProps> = () => {
-  const params = useParams<ProfileParams>();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.profileReducer);
+
+const Profile: FC = () => {
+  const { user } = useAppSelector((state) => state.authReducer);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   useEffect(() => {
-    dispatch(fetchUserdata(Number(params.id)));
-  }, [dispatch, params.id]);
+    user?.roleName === 'USER'
+      ? appointmentService
+          .findByPatient(user?.id!)
+          .then((res) => res.data)
+          .then(setAppointments)
+      : appointmentService
+          .findByDoctor(user?.id!)
+          .then((res) => res.data)
+          .then(setAppointments);
+  }, [user?.roleName, user?.id]);
 
   return (
-    <StyledContainer className="mt-5 d-flex align-items-center justify-content-center">
-      <Card>
-        <Card.Header as="h3" className="text-center">
-          Profile
-        </Card.Header>
-        <Card.Body>
-          <Row className="g-5">
-            <Col>
-              <StyledAvatar
-                src={process.env.REACT_APP_API_URL + 'images/' + user?.profilePictureUrl}
-                roundedCircle
-                thumbnail
-              />
-              <div className="d-flex flex-column justify-content-center">
-                <p className="text-center mb-3">
-                  {user?.firstName} {user?.lastName}
-                </p>
-                <StyledButton variant="success" className="mb-3">
-                  Contact
-                </StyledButton>
-              </div>
-            </Col>
-            <Col>
-              <StyledLabel>E-mail</StyledLabel>
-              <p>{user?.email}</p>
-              <StyledLabel>First Name</StyledLabel>
-              <p>{user?.firstName}</p>
-              <StyledLabel>Last Name</StyledLabel>
-              <p>{user?.lastName}</p>
-              <StyledLabel>Phone Number</StyledLabel>
-              <p>{user?.phoneNumber}</p>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
+    <StyledContainer className="mt-5">
+      <Row className="mt-5">
+        <Col md={4} className="mb-4">
+          <UserCard user={user!} />
+        </Col>
+        <Col className="mb-4">
+          <UserInfo user={user!} />
+        </Col>
+      </Row>
+      {appointments.length > 0 && (
+        <Row>
+          <Col>
+            <Appointments appointments={appointments} isDoctor={user?.roleName === 'DOCTOR'} />
+          </Col>
+        </Row>
+      )}
     </StyledContainer>
   );
 };

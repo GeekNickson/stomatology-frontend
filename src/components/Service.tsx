@@ -28,14 +28,14 @@ export const StyledCard = styled(Card)`
 
 const Service: FC<ServiceProps> = ({ id, name, price, imageUrl }) => {
   const history = useHistory();
-  const { isAuthenticated } = useAppSelector((state) => state.authReducer);
+  const { user } = useAppSelector((state) => state.authReducer);
   return (
     <StyledCard bg="light" className="shadow rounded">
       <StyledCardImage src={process.env.REACT_APP_API_URL + 'images/' + imageUrl} alt={name} />
       <Card.Body className="d-flex flex-column align-items-center justify-content-around">
         <Card.Title className="text-center">{name}</Card.Title>
         <Card.Text>Price: {price}</Card.Text>
-        {isAuthenticated && (
+        {user?.roleName === 'USER' && (
           <StyledButton variant="success" onClick={() => history.push(`/sign-up/service/${id}`, { isService: true })}>
             Sign Up
           </StyledButton>

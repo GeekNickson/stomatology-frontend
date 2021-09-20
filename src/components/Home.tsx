@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import Doctors from './Doctors';
+import Feedbacks from './Feedbacks';
 import Promo from './Promo';
 import Services from './Services';
 import ServicesMeta from './ServicesMeta';
@@ -21,6 +22,7 @@ const Home = () => {
       <Promo />
       <Services />
       <Doctors />
+      <Feedbacks />
       <ServicesMeta />
     </>
   );

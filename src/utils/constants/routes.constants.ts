@@ -5,3 +5,4 @@ export const PROFILE_ROURE = '/profile/:id';
 export const SIGN_UP_SERVICE_ROUTE = '/sign-up/service/:id';
 export const SIGN_UP_DOCTOR_ROUTE = '/sign-up/doctor/:id';
 export const DOCTOR_PROFILE_ROUTE = '/doctor/:id';
+export const FEEDBACK_ROUTE = '/feedback';

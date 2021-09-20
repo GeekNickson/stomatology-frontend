@@ -3,8 +3,10 @@ import DoctorProfile from '../../components/DoctorProfile';
 import Home from '../../components/Home';
 import Profile from '../../components/Profile';
 import SignUpWrapper from '../../components/SignUpWrapper';
+import Feedback from '../../components/Feedback';
 import {
   DOCTOR_PROFILE_ROUTE,
+  FEEDBACK_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
   PROFILE_ROURE,
@@ -44,5 +46,9 @@ export const authRoutes = [
   {
     path: SIGN_UP_DOCTOR_ROUTE,
     component: SignUpWrapper,
+  },
+  {
+    path: FEEDBACK_ROUTE,
+    component: Feedback,
   },
 ];

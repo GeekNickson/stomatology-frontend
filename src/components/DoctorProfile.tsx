@@ -35,7 +35,7 @@ const DoctorProfile: React.FunctionComponent<IDoctorProfileProps> = (props) => {
   return (
     <StyledContainer>
       <Row className="mt-5">
-        <Col md={4} className=" mb-4">
+        <Col md={4} className="mb-4">
           <Card bg="light" className="shadow rounded">
             <Card.Img variant="top" src={process.env.REACT_APP_API_URL + 'images/' + doctor?.profilePictureUrl} />
             <Card.Body className="d-flex flex-column align-items-center justify-between">

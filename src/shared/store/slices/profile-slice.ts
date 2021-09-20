@@ -29,7 +29,7 @@ const fetchUserdata = createAsyncThunk<
     console.log(thunkApi.getState());
     const response = await patientService.getPatient(id);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     const apiError: ApiError = { code: error.response.status, message: error.response.data };
     return thunkApi.rejectWithValue(apiError);
   }

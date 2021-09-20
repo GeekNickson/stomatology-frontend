@@ -32,7 +32,7 @@ const login = createAsyncThunk<User, Credentials, { rejectValue: ApiError }>(
       localStorageService.setToken(response.data.jwt);
       thunkApi.dispatch(push('/home'));
       return response.data.user;
-    } catch (error) {
+    } catch (error: any) {
       const authError: ApiError = { code: error.response.status, message: error.response.data };
       return thunkApi.rejectWithValue(authError);
     }
@@ -47,7 +47,7 @@ const registerUser = createAsyncThunk<User, FormData, { rejectValue: ApiError }>
       localStorageService.setToken(response.data.jwt);
       thunkApi.dispatch(push('/home'));
       return response.data.user;
-    } catch (error) {
+    } catch (error: any) {
       const authError: ApiError = { code: error.response.status, message: error.response.data };
       return thunkApi.rejectWithValue(authError);
     }
@@ -59,7 +59,7 @@ const logout = createAsyncThunk<void, void, { rejectValue: ApiError }>(LOGOUT_AC
     await authService.logout();
     localStorageService.removeToken();
     thunkApi.dispatch(push('/home'));
-  } catch (error) {
+  } catch (error: any) {
     const authError: ApiError = { code: error.response.status, message: error.response.data };
     return thunkApi.rejectWithValue(authError);
   }
@@ -69,7 +69,7 @@ const loadUser = createAsyncThunk<User, void, { rejectValue: ApiError }>(LOAD_US
   try {
     const response = await authService.getAuth();
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     const authError: ApiError = { code: error.response.status, message: error.response.data };
     return thunkApi.rejectWithValue(authError);
   }

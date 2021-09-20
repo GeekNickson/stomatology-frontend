@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import { HOME_ROUTE, LOGIN_ROUTE } from '../utils/constants/routes.constants';
+import { FEEDBACK_ROUTE, HOME_ROUTE, LOGIN_ROUTE } from '../utils/constants/routes.constants';
 import { useAppDispatch, useAppSelector } from '../shared/hooks/hooks';
 import { logout } from '../shared/store/slices/auth-slice';
 import { Nav, NavLink, Image, NavDropdown } from 'react-bootstrap';
@@ -36,6 +36,11 @@ const Navigation = () => {
         <LinkContainer to={HOME_ROUTE + '/#services'}>
           <NavLink>Services</NavLink>
         </LinkContainer>
+        {isAuthenticated && user?.roleName === 'USER' && (
+          <LinkContainer to={FEEDBACK_ROUTE}>
+            <NavLink>Feedback</NavLink>
+          </LinkContainer>
+        )}
       </Nav>
       <Nav className="align-items-center justify-content-end">
         {isAuthenticated ? (

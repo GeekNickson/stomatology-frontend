@@ -28,7 +28,7 @@ export const StyledCard = styled(Card)`
 
 const DoctorCard: FC<DoctorProps> = ({ doctor }) => {
   const history = useHistory();
-  const { isAuthenticated } = useAppSelector((state) => state.authReducer);
+  const { user } = useAppSelector((state) => state.authReducer);
 
   return (
     <StyledCard bg="light" className="shadow rounded">
@@ -39,7 +39,7 @@ const DoctorCard: FC<DoctorProps> = ({ doctor }) => {
         <StyledButton variant="success" onClick={() => history.push(`/doctor/${doctor.id}`)}>
           Profile
         </StyledButton>
-        {isAuthenticated && (
+        {user?.roleName === 'USER' && (
           <StyledButton variant="dark" onClick={() => history.push(`/sign-up/doctor/${doctor.id}`)}>
             Appointment
           </StyledButton>

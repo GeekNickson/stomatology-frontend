@@ -1,13 +1,16 @@
 import { FC } from 'react';
 import { Doctor } from '../shared/model/doctor.model';
 import { MedicalService } from '../shared/model/medical-service.model';
-import {  FormGroup, FormLabel, Card } from 'react-bootstrap';
+import { FormGroup, FormLabel, Card } from 'react-bootstrap';
 import { Form, Formik } from 'formik';
 import FormikDatepicker from './FormikDatepicker';
 import FormikSelect from './FormikSelect';
 import * as Yup from 'yup';
 import { StyledContainer, StyledCard } from './Auth';
 import { StyledButton } from './DoctorCard';
+import { useAppSelector } from '../shared/hooks/hooks';
+import { AppointmentRequest, appointmentService } from '../shared/service/appointment.service';
+import { useHistory } from 'react-router';
 export interface SignUpProps {
   currentDoctor: Doctor | null;
   currentService: MedicalService | null;
@@ -27,9 +30,21 @@ const signUpValidation = Yup.object({
   time: Yup.date().min(new Date(), 'Date must be greater than today').required('This field is required'),
 });
 const SignUp: FC<SignUpProps> = ({ currentDoctor, currentService, doctors, services }) => {
+  const { user } = useAppSelector((state) => state.authReducer);
+
+  const history = useHistory();
+
   const handleSubmit = (values: SignUpFormValues, setSubmitting: (isSubmitting: boolean) => void) => {
     setTimeout(() => {
-      console.log(values);
+      const data: AppointmentRequest = {
+        dateTime: values.time,
+        doctorId: values.doctor!,
+        serviceId: values.service!,
+        patientId: user?.id!,
+      };
+
+      appointmentService.signUp(data).then(() => history.push(`/profile/${user?.id}`));
+
       setSubmitting(false);
     }, 100);
   };
